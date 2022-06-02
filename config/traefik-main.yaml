@@ -1,0 +1,59 @@
+# Docker configuration backend
+providers:
+  docker:
+    defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.MY_DOMAIN.com`)"
+  file:
+    directory: /etc/traefik/dynamic/traefik-dynamic.yaml
+    watch: true
+
+
+# --------------- ENTRYPOINTS ---------------
+entryPoints:
+  web:
+    address: ":80"
+
+  websecure:
+    address: ":443"
+
+  dashboard:
+    address: ":8080"
+  
+  metrics:
+    address: ":8082"
+
+
+
+# --------------- API ---------------
+api:
+  dashboard: true
+#  insecure: true
+
+
+# --------------- METRICS ---------------
+metrics:
+  prometheus:
+    entryPoint: metrics
+
+
+# --------------- TLS ---------------
+certificatesResolvers:
+  myresolver:
+    acme:
+      email: support@MY_DOMAIN.com
+      storage: /home/support/acme.json
+
+      # HTTP Challenge
+      httpChallenge:
+        # used during the challenge
+        entryPoint: web
+
+
+
+# --------------- LOG ---------------
+accessLog:
+  accessLog: {}
+  bufferingSize: 100
+#  File Support
+#  filePath: "/home/support/access.log"
+#  format: json
+#  bufferingSize: 100

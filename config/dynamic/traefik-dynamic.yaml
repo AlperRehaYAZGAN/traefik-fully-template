@@ -1,0 +1,112 @@
+
+http:
+  # ROUTERS
+  routers:
+    # -------------------- ROUTER - DASHBOARD --------------------
+    dashboard:
+      rule: Host(`tradash.MY_SUB_DOMAIN.com`)"
+      service: api@internal
+      middlewares:
+        - dash-auth
+
+    # -------------------- ROUTER - NOCO --------------------
+    appnoco:
+      entryPoints:
+        - web
+        # - websecure
+      service: svc-app-noco
+      rule: "Host(`noco.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/noco/`))" 
+      # use middleware
+      middlewares:
+        - prefix-app-noco
+
+      
+    # -------------------- ROUTER - CDN MINIO --------------------
+    appcdn:
+      entryPoints:
+        - web
+      # - websecure
+      service: svc-app-cdn
+      rule: "Host(`cdn.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/cdn/`))"
+      # use middleware
+      middlewares:
+        - prefix-app-cdn
+
+    # -------------------- ROUTER - FRONT --------------------
+    appfront:
+      entryPoints:
+      - web
+      # - websecure
+      service: svc-app-front
+      rule: Host(`MY_DOMAIN.com`)
+    
+    # -------------------- ROUTER - API --------------------
+    webapi:
+      entryPoints:
+      - web
+      # - websecure
+      service: svc-app-api
+      rule: (Host(`api.MY_SUB_DOMAIN.com`)) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/api/`))
+      # use middleware
+      middlewares:
+        - prefix-app-api
+
+
+
+  # SERVICES
+  services:    
+    # -------------------- SERVICE - NOCO --------------------
+    svc-app-noco:
+      loadBalancer:
+        servers:
+          - url: http://SERVICENOCO:PORT
+        passHostHeader: true
+
+    # -------------------- SERVICE - CDN MINIO --------------------
+    svc-app-cdn:
+      loadBalancer:
+        servers:
+          - url: http://SERVICECDN:PORT
+        passHostHeader: true
+
+    # -------------------- SERVICE - FRONT --------------------
+    svc-app-front:
+      loadBalancer:
+        servers:
+          - url: http://SERVICEFRONT:PORT
+        passHostHeader: true
+        
+    # -------------------- SERVICE - API --------------------
+    svc-app-api:
+      loadBalancer:
+        servers:
+          - url: http://SERVICEAPI:PORT
+        passHostHeader: true
+
+
+
+  # MIDDLEWARES
+  middlewares:
+
+    dash-auth:
+      basicAuth:
+        users:
+          - "test:$apr1$xa0172tu$AfbPBbUq.o7cUch0gn3We/"
+
+    prefix-app-noco:
+      stripPrefix:
+        prefixes:
+          - "/noco/"
+        forceSlash: true
+    
+    prefix-app-cdn:
+      stripPrefix:
+        prefixes:
+          - "/cdn/"
+        forceSlash: true
+    
+    prefix-app-api:
+      stripPrefix:
+        prefixes:
+          - "/api/"
+        forceSlash: true

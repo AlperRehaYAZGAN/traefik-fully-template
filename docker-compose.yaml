@@ -1,0 +1,25 @@
+# This is the simple Traefik Docker Compose YAML 
+
+version: "3"
+
+services:
+  traefikapp:
+    image: traefik:2.5
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+      - "8082:8082"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./config/traefik-main.yaml:/etc/traefik/traefik.yaml # main app config
+      - ./config/dynamic/traefik-dynamic.yaml:/etc/traefik/dynamic/traefik-dynamic.yaml # dynamic config
+      - ./volumes/traefik/acme.json:/home/support/acme.json # ssl
+      - ./volumes/traefik/access.log:/home/support/access.log # file access log 
+    command: "--configFile=/etc/traefik/traefik.yaml"
+
+# network: alyafnnet
+networks:
+  alyafnnet:
+    name: alyafnnet
+    driver: bridge
