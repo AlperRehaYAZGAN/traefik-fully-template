@@ -1,11 +1,11 @@
-### Traefik Wildcard and Regex Host
+### Traefik Fully Enabled Template
 This is the repository for demonstrating Traefik wildcard and dynamically updatable host and reverse_proxy utilities with single line of code. In addition you can use Traefik AUTO LetsEncrypt SSL configuration. 
 
 #### Usage
 Setting up environment.  
 ```sh
 # clone
-git clone https://github.com/AlperRehaYAZGAN/traefik-wildcard-and-dynamic-config
+git clone https://github.com/AlperRehaYAZGAN/traefik-fully-template.git
 cd traefik-dynamic-and-wildcard-config
 
 # create volumes folder to attach access_logs and ssl configs
