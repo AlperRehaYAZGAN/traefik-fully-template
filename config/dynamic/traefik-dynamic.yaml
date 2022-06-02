@@ -13,7 +13,7 @@ http:
     appnoco:
       entryPoints:
         - web
-        # - websecure
+        - websecure
       service: svc-app-noco
       rule: "Host(`noco.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/noco/`))" 
       # use middleware
@@ -25,7 +25,7 @@ http:
     appcdn:
       entryPoints:
         - web
-      # - websecure
+      - websecure
       service: svc-app-cdn
       rule: "Host(`cdn.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/cdn/`))"
       # use middleware
@@ -36,7 +36,7 @@ http:
     appfront:
       entryPoints:
       - web
-      # - websecure
+      - websecure
       service: svc-app-front
       rule: Host(`MY_DOMAIN.com`)
     
@@ -44,7 +44,7 @@ http:
     webapi:
       entryPoints:
       - web
-      # - websecure
+      - websecure
       service: svc-app-api
       rule: (Host(`api.MY_SUB_DOMAIN.com`)) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/api/`))
       # use middleware
