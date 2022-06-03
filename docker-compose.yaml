@@ -5,6 +5,13 @@ version: "3"
 services:
   traefikapp:
     image: traefik:2.5
+    logging:
+      driver: "fluentd"
+      options:
+        fluentd-address: localhost:24224
+        tag: "traefik-app.access"
+    networks:
+      - alyafnnet
     ports:
       - "80:80"
       - "443:443"
@@ -17,6 +24,42 @@ services:
       - ./volumes/traefik/acme.json:/home/support/acme.json # ssl
       - ./volumes/traefik/access.log:/home/support/access.log # file access log 
     command: "--configFile=/etc/traefik/traefik.yaml"
+
+  # fluentbit log collector service
+  fluent-bit:
+    image: fluent/fluent-bit:1.5
+    volumes:
+      - ./fluent-bit/conf:/fluent-bit/etc
+    ports:
+      - 24224:24224
+      - 5140:5140/udp
+      - 2020:2020
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 100m
+        max-file: "5"
+    environment:
+      - "AWS_ACCESS_KEY_ID=$MINIO_ACCESS_ID"
+      - "AWS_SECRET_ACCESS_KEY=$MINIO_ACCESS_KEY"
+    networks:
+      - alyafnnet
+  
+  # access_log storage
+  cdnapp: # rancher/minio-minio
+    image: rancher/minio-minio:RELEASE.2020-07-13T18-09-56Z
+    container_name: cdnapp
+    ports:
+      - "9000:9000" 
+    volumes:
+      - ./volumes/minio:/data
+    environment:
+      - "MINIO_ROOT_USER=$MINIO_ACCESS_ID"
+      - "MINIO_ROOT_PASSWORD=$MINIO_ACCESS_KEY"
+      - "MINIO_BROWSER=on"
+    restart: always
+    # pass server /data to minio
+    command: server /data
 
 # network: alyafnnet
 networks:
