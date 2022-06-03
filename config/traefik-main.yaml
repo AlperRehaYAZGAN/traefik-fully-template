@@ -3,7 +3,7 @@ providers:
   docker:
     defaultRule: "Host(`{{ trimPrefix `/` .Name }}.docker.MY_DOMAIN.com`)"
   file:
-    directory: /etc/traefik/dynamic/traefik-dynamic.yaml
+    directory: /etc/traefik/dynamic/
     watch: true
 
 
@@ -48,10 +48,8 @@ certificatesResolvers:
         entryPoint: web
 
 
-
 # --------------- LOG ---------------
 accessLog:
-  accessLog: {}
   bufferingSize: 100
 #  File Support
 #  filePath: "/home/support/access.log"

@@ -4,7 +4,7 @@ http:
   routers:
     # -------------------- ROUTER - DASHBOARD --------------------
     dashboard:
-      rule: Host(`tradash.MY_SUB_DOMAIN.com`)"
+      rule: Host(`tradash.MY_SUB_DOMAIN.com`)
       service: api@internal
       middlewares:
         - dash-auth
@@ -15,7 +15,7 @@ http:
         - web
         - websecure
       service: svc-app-noco
-      rule: "Host(`noco.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/noco/`))" 
+      rule: (Host(`noco.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/noco/`))) 
       # use middleware
       middlewares:
         - prefix-app-noco
@@ -25,9 +25,9 @@ http:
     appcdn:
       entryPoints:
         - web
-      - websecure
+        - websecure
       service: svc-app-cdn
-      rule: "Host(`cdn.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/cdn/`))"
+      rule: (Host(`cdn.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/cdn/`)))
       # use middleware
       middlewares:
         - prefix-app-cdn
@@ -35,16 +35,16 @@ http:
     # -------------------- ROUTER - FRONT --------------------
     appfront:
       entryPoints:
-      - web
-      - websecure
+        - web
+        - websecure
       service: svc-app-front
       rule: Host(`MY_DOMAIN.com`)
     
     # -------------------- ROUTER - API --------------------
     webapi:
       entryPoints:
-      - web
-      - websecure
+        - web
+        - websecure
       service: svc-app-api
       rule: (Host(`api.MY_SUB_DOMAIN.com`)) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/api/`))
       # use middleware
