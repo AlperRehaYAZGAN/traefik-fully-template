@@ -50,6 +50,8 @@ certificatesResolvers:
 
 # --------------- LOG ---------------
 accessLog:
+  filePath: "/home/support/access.log"
+  format: json
   bufferingSize: 100
 #  File Support
 #  filePath: "/home/support/access.log"

@@ -6,8 +6,8 @@ http:
     dashboard:
       rule: Host(`tradash.MY_SUB_DOMAIN.com`)
       service: api@internal
-      middlewares:
-        - dash-auth
+#      middlewares:
+#        - dash-auth
 
     # -------------------- ROUTER - NOCO --------------------
     appnoco:
