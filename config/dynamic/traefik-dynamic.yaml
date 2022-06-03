@@ -2,51 +2,101 @@
 http:
   # ROUTERS
   routers:
-    # -------------------- ROUTER - DASHBOARD --------------------
-    dashboard:
+    # -------------------- ROUTER - DASHBOARD HTTPS --------------------
+    dashboardssl:
       rule: Host(`tradash.MY_SUB_DOMAIN.com`)
       service: api@internal
-#      middlewares:
-#        - dash-auth
+      tls: 
+        certResolver: "myresolver"
+      middlewares:
+        - dash-auth
 
-    # -------------------- ROUTER - NOCO --------------------
-    appnoco:
+
+
+    # -------------------- ROUTER - NOCO HTTP --------------------
+    appnocohttp:
       entryPoints:
         - web
-        - websecure
       service: svc-app-noco
       rule: (Host(`noco.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/noco/`))) 
       # use middleware
       middlewares:
         - prefix-app-noco
 
-      
-    # -------------------- ROUTER - CDN MINIO --------------------
-    appcdn:
+    # -------------------- ROUTER - NOCO HTTPS --------------------
+    appnocohttps:
+      entryPoints:
+        - websecure
+      service: svc-app-noco
+      rule: (Host(`noco.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/noco/`))) 
+      tls: 
+        certResolver: "myresolver"      
+      # use middleware
+      middlewares:
+        - prefix-app-noco
+
+
+
+    # -------------------- ROUTER - CDN MINIO HTTP --------------------
+    appcdnhttp:
       entryPoints:
         - web
-        - websecure
       service: svc-app-cdn
       rule: (Host(`cdn.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/cdn/`)))
       # use middleware
       middlewares:
         - prefix-app-cdn
 
-    # -------------------- ROUTER - FRONT --------------------
-    appfront:
+    # -------------------- ROUTER - CDN MINIO HTTPS --------------------
+    appcdnhttps:
+      entryPoints:
+        - websecure
+      service: svc-app-cdn
+      rule: (Host(`cdn.MY_SUB_DOMAIN.com`) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/cdn/`)))
+      tls: 
+        certResolver: "myresolver"
+      # use middleware
+      middlewares:
+        - prefix-app-cdn
+
+
+
+    # -------------------- ROUTER - FRONT HTTP --------------------
+    appfronthttp:
       entryPoints:
         - web
+      service: svc-app-front
+      rule: Host(`MY_DOMAIN.com`)
+
+    # -------------------- ROUTER - FRONT HTTPS --------------------
+    appfronthttps:
+      entryPoints:
         - websecure
       service: svc-app-front
       rule: Host(`MY_DOMAIN.com`)
+      tls: 
+        certResolver: "myresolver"
+
+
     
-    # -------------------- ROUTER - API --------------------
-    webapi:
+    # -------------------- ROUTER - API HTTP --------------------
+    webapihttp:
       entryPoints:
         - web
+      service: svc-app-api
+      rule: (Host(`api.MY_SUB_DOMAIN.com`)) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/api/`))
+      # use middleware
+      middlewares:
+        - prefix-app-api
+
+    # -------------------- ROUTER - API HTTPS --------------------
+    webapihttps:
+      entryPoints:
         - websecure
       service: svc-app-api
       rule: (Host(`api.MY_SUB_DOMAIN.com`)) || (Host(`MY_DOMAIN.com`) && PathPrefix(`/api/`))
+      tls: 
+        certResolver: "myresolver"
       # use middleware
       middlewares:
         - prefix-app-api

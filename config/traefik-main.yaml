@@ -14,9 +14,6 @@ entryPoints:
 
   websecure:
     address: ":443"
-
-  dashboard:
-    address: ":8080"
   
   metrics:
     address: ":8082"
@@ -26,7 +23,7 @@ entryPoints:
 # --------------- API ---------------
 api:
   dashboard: true
-#  insecure: true
+  insecure: false
 
 
 # --------------- METRICS ---------------
