@@ -16,8 +16,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./config/traefik-main.yaml:/etc/traefik/traefik.yaml # main app config
       - ./config/dynamic/traefik-dynamic.yaml:/etc/traefik/dynamic/traefik-dynamic.yaml # dynamic config
-      - ./volumes/traefik/acme.json:/home/support/acme.json # ssl
-      - ./volumes/traefik/access.log:/home/support/access.log # file access log 
+      - ./volumes/traefik/:/home/support/ # ssl and file logs
     command: "--configFile=/etc/traefik/traefik.yaml"
 
 # network: alyafnnet
